@@ -1,0 +1,15 @@
+I decided to try my luck with creating a Google Chrome Extension that interfaces with the APIs to obtain the proper function. Since this is my first time trying to create an extension, it's not perfectly polished, but the general algorithm follows the 
+
+1. Convert the destination to it's zip code - use GeoCode API JSON
+2. Use the zip code to find nearby zip codes (within 30km max) - use GeoCode API JSON
+3. Input the nearby zip codes into the WeatherBug API 
+4. Extract 7-day forecast for each of the nearby zip code using the WeatherBug API.
+5. Find the max of each 7-day forecast and insert all of the maxes, their locations, and the day of the max into a linkedlist with those two variables. 
+	- Note: as you add more variables into the linked list you maintain the order of the elements based on the max temperature of the 7-day forecast. 
+6. Cut off all but the first 10 locations.
+7. Extract the relevant data to display 
+	- location - use stationName var for display
+	- day of max - use the data in the linked list.
+	- max temperature (used to determine warmest)
+	
+I have created a packaged Google Chrome Extension. To use it, you can simply install it into your google chrome, type in the destination city (and any qualification like state) and click search. 

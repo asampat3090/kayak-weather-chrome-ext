@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+
+  "name": "Weather App",
+  "description": "This extension gets the weather of nearest places within 30 miles",
+  "version": "1.0",
+
+  "permissions": [
+    "http://i.wxbug.net/*"
+  ],
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+  
+
+}
