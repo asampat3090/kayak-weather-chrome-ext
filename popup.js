@@ -10,10 +10,11 @@ document.forms[0].onsubmit = function(e) {
   e.preventDefault(); // Prevent submission
   query = document.getElementById('place').value;
   //getZipFromCity_: 
-  var zip_agg;
+  var zip_arr = [];
   var req1;
   var req2;
   var req3;
+  var req4;
   var matchedzipcode;
   
 
@@ -41,30 +42,57 @@ document.forms[0].onsubmit = function(e) {
     req2.onload = function () {
       var data2 = JSON.parse(req2.responseText);
       //put all of the nearby zips together into a string
-      zip_agg = matchedzipcode;
+      zip_arr[0] = matchedzipcode;
       for(var i  = 1 ; i< data2.postalCodes.length; i++) {
-          zip_agg = zip_agg + ',' + data2.postalCodes[i].postalCode;
+          zip_arr[i] = data2.postalCodes[i].postalCode;
       }
 
-      //Req 3 - next request
-      req3=new XMLHttpRequest();
-      req3.open("GET", 'http://i.wxbug.net/REST/Direct/GetObs.ashx?' +
-        'zip=' + encodeURIComponent(zip_agg) + '&ic=1&' +
-        'api_key=pd7k857xcvvgszap8ajkhdnu', true);
-      req3.onload = function () {
-        var weatherlocations = JSON.parse(req3.responseText);
-        for (var i = 0; i < weatherlocations.length; i++) {
-          var div = document.createElement('div');
-          div.innerHTML = "Location: " + weatherlocations[i].stationName + 
-          "Temperature: " + weatherlocations[i].temperature.toString();
-          //img.src = this.constructKittenURL_(kittens[i]);
-          //img.setAttribute('alt', kittens[i].getAttribute('title'));
-          document.body.appendChild(div);
-        }
+      // For loop through the zip_arr to find the warmest temperature by 
+      // using the 7-day forecast call + City info call in WeatherBug API
 
+      
+      
 
-      };
-      req3.send(null);
+      //for(var j = 0; j<zip_arr.length;j++) {
+        //Req 3 - next request
+        req3=new XMLHttpRequest();
+        req3.open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
+          'zip=' + encodeURIComponent(zip_arr[0]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'api_key=pd7k857xcvvgszap8ajkhdnu', true);
+        req3.onload = function () {
+          var seven_day_forecast = JSON.parse(req3.responseText);
+          // find a maximum temperature in the 7 day forecast.
+          var max = 0;
+          var daytitle = null;
+          for (var k = 0; k < seven_day_forecast.forecastList.length; k++) {
+            if(seven_day_forecast.forecastList[k].high > max) {
+              max = seven_day_forecast.forecastList[k].high;
+              daytitle = seven_day_forecast.forecastList[k].dayTitle;
+            }
+          }
+          // Req 4 - request for city information.
+          req4=new XMLHttpRequest();
+          req4.open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
+            'zip=' + encodeURIComponent(zip_arr[0]) + 
+            '&api_key=pd7k857xcvvgszap8ajkhdnu', true);
+          req4.onload = function () {
+            var loc_data = JSON.parse(req4.responseText);
+            var div = document.createElement('div');
+            var div2 = document.createElement('div');
+            var div3 = document.createElement('div');
+            var div4 = document.createElement('div');
+            div2.innerHTML = "Location: " + loc_data.location.city ;
+            div3.innerHTML = "Day of the Week: " + daytitle;
+            div4.innerHTML = "Temperature: " + max.toString();
+            div.appendChild(div2);
+            div.appendChild(div3);
+            div.appendChild(div4);
+            document.body.appendChild(div);
+          };
+          req4.send(null);
+        };
+        req3.send(null);
+      //}
     };
     req2.send(null);
   };
