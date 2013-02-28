@@ -19,28 +19,28 @@ document.forms[0].onsubmit = function(e) {
   
 
 
-  req1=new XMLHttpRequest();
+  req1000=new XMLHttpRequest();
 
-  req1.open("GET", 'http://api.geonames.org/postalCodeSearchJSON?' +
+  req1000.open("GET", 'http://api.geonames.org/postalCodeSearchJSON?' +
         'placename=' + encodeURIComponent(query) + '&' +
         'maxRows=10&' +
         'username=ms_test201302', true);
-  req1.onload = function () {
-    var data1 = JSON.parse(req1.responseText);
+  req1000.onload = function () {
+    var data1 = JSON.parse(req1000.responseText);
     // Find first postal code that matches
     matchedzipcode = data1.postalCodes[0].postalCode;
 
 
     //Req 2 - next request
-    req2=new XMLHttpRequest(); 
-    req2.open("GET", 'http://api.geonames.org/findNearbyPostalCodesJSON?' +
+    req2000=new XMLHttpRequest(); 
+    req2000.open("GET", 'http://api.geonames.org/findNearbyPostalCodesJSON?' +
         'postalcode=' + encodeURIComponent(matchedzipcode) + '&' + 
         'country=US&' +
         'maxRows=10&' +
         'radius=30&' +
         'username=ms_test201302', true);
-    req2.onload = function () {
-      var data2 = JSON.parse(req2.responseText);
+    req2000.onload = function () {
+      var data2 = JSON.parse(req2000.responseText);
       //put all of the nearby zips together into a string
       zip_arr[0] = matchedzipcode;
       for(var i  = 1 ; i< data2.postalCodes.length; i++) {
@@ -52,15 +52,17 @@ document.forms[0].onsubmit = function(e) {
 
       
       
-
-      //for(var j = 0; j<zip_arr.length;j++) {
+      function populatefield(index) {
+        if(index>=2*zip_arr.length) {
+           return;
+        }
         //Req 3 - next request
-        req3=new XMLHttpRequest();
-        req3.open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[0]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+        window["req"+index.toString()]=new XMLHttpRequest();
+        window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu', true);
-        req3.onload = function () {
-          var seven_day_forecast = JSON.parse(req3.responseText);
+        window["req"+index.toString()].onload = function () {
+          var seven_day_forecast = JSON.parse(window["req"+index.toString()].responseText);
           // find a maximum temperature in the 7 day forecast.
           var max = 0;
           var daytitle = null;
@@ -71,12 +73,12 @@ document.forms[0].onsubmit = function(e) {
             }
           }
           // Req 4 - request for city information.
-          req4=new XMLHttpRequest();
-          req4.open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-            'zip=' + encodeURIComponent(zip_arr[0]) + 
+          window["req"+(index+1).toString()]=new XMLHttpRequest();
+          window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
+            'zip=' + encodeURIComponent(zip_arr[index/2]) + 
             '&api_key=pd7k857xcvvgszap8ajkhdnu', true);
-          req4.onload = function () {
-            var loc_data = JSON.parse(req4.responseText);
+          window["req"+(index+1).toString()].onload = function () {
+            var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
             var div = document.createElement('div');
             var div2 = document.createElement('div');
             var div3 = document.createElement('div');
@@ -88,15 +90,18 @@ document.forms[0].onsubmit = function(e) {
             div.appendChild(div3);
             div.appendChild(div4);
             document.body.appendChild(div);
+            // call the recursive call with incremented index
+            populatefield(index+2);
           };
-          req4.send(null);
+          window["req"+(index+1).toString()].send(null);
         };
-        req3.send(null);
-      //}
+        window["req"+index.toString()].send(null);
+      }
+      populatefield(0);
     };
-    req2.send(null);
+    req2000.send(null);
   };
-  req1.send(null);
+  req1000.send(null);
 
   
   
