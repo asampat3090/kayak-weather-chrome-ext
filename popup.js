@@ -145,7 +145,7 @@ document.forms[0].onsubmit = function(e) {
           div.appendChild(div3);
           div.appendChild(div4);
           document.body.appendChild(div);
-        }, 15000);
+        }, 8000);
 
       setTimeout(function() { 
         //Req 3 - next request
@@ -191,7 +191,7 @@ document.forms[0].onsubmit = function(e) {
           div.appendChild(div3);
           div.appendChild(div4);
           document.body.appendChild(div);
-        }, 30000);
+        }, 16000);
 
       setTimeout(function() { 
         //Req 3 - next request
@@ -237,8 +237,237 @@ document.forms[0].onsubmit = function(e) {
           div.appendChild(div3);
           div.appendChild(div4);
           document.body.appendChild(div);
-        }, 45000);
+        }, 24000);
 
+      setTimeout(function() { 
+        //Req 3 - next request
+        index = 8;
+        window["req"+index.toString()]=new XMLHttpRequest();
+        window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+         //window["req"+index.toString()].onload = function () {};
+        window["req"+index.toString()].send(null);
+        var seven_day_forecast = JSON.parse(window["req"+index.toString()].responseText);
+        // find a maximum temperature in the 7 day forecast.
+        var max = 0;
+        var daytitle = null;
+        for (var k = 0; k < seven_day_forecast.forecastList.length; k++) {
+         if(seven_day_forecast.forecastList[k].high > max) {
+          max = seven_day_forecast.forecastList[k].high;
+          daytitle = seven_day_forecast.forecastList[k].dayTitle;
+          }
+        }
+
+        
+
+        
+          // Req 4 - request for city information.
+          window["req"+(index+1).toString()]=new XMLHttpRequest();
+          window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+        //window["req"+(index+1).toString()].onload = function () {
+          window["req"+(index+1).toString()].send(null);
+          var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          var div = document.createElement('div');
+          var div2 = document.createElement('div');
+          var div3 = document.createElement('div');
+          var div4 = document.createElement('div');
+          div2.innerHTML = "Location: " + loc_data.location.city ;
+          div3.innerHTML = "Day of the Week: " + daytitle;
+          div4.innerHTML = "Temperature: " + max.toString();
+          div.appendChild(div2);
+          div.appendChild(div3);
+          div.appendChild(div4);
+          document.body.appendChild(div);
+        }, 32000);
+
+      setTimeout(function() { 
+        //Req 3 - next request
+        index = 10;
+        window["req"+index.toString()]=new XMLHttpRequest();
+        window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+         //window["req"+index.toString()].onload = function () {};
+        window["req"+index.toString()].send(null);
+        var seven_day_forecast = JSON.parse(window["req"+index.toString()].responseText);
+        // find a maximum temperature in the 7 day forecast.
+        var max = 0;
+        var daytitle = null;
+        for (var k = 0; k < seven_day_forecast.forecastList.length; k++) {
+         if(seven_day_forecast.forecastList[k].high > max) {
+          max = seven_day_forecast.forecastList[k].high;
+          daytitle = seven_day_forecast.forecastList[k].dayTitle;
+          }
+        }
+
+        
+
+        
+          // Req 4 - request for city information.
+          window["req"+(index+1).toString()]=new XMLHttpRequest();
+          window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+        //window["req"+(index+1).toString()].onload = function () {
+          window["req"+(index+1).toString()].send(null);
+          var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          var div = document.createElement('div');
+          var div2 = document.createElement('div');
+          var div3 = document.createElement('div');
+          var div4 = document.createElement('div');
+          div2.innerHTML = "Location: " + loc_data.location.city ;
+          div3.innerHTML = "Day of the Week: " + daytitle;
+          div4.innerHTML = "Temperature: " + max.toString();
+          div.appendChild(div2);
+          div.appendChild(div3);
+          div.appendChild(div4);
+          document.body.appendChild(div);
+        }, 40000);
+
+      setTimeout(function() { 
+        //Req 3 - next request
+        index = 12;
+        window["req"+index.toString()]=new XMLHttpRequest();
+        window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+         //window["req"+index.toString()].onload = function () {};
+        window["req"+index.toString()].send(null);
+        var seven_day_forecast = JSON.parse(window["req"+index.toString()].responseText);
+        // find a maximum temperature in the 7 day forecast.
+        var max = 0;
+        var daytitle = null;
+        for (var k = 0; k < seven_day_forecast.forecastList.length; k++) {
+         if(seven_day_forecast.forecastList[k].high > max) {
+          max = seven_day_forecast.forecastList[k].high;
+          daytitle = seven_day_forecast.forecastList[k].dayTitle;
+          }
+        }
+
+        
+
+        
+          // Req 4 - request for city information.
+          window["req"+(index+1).toString()]=new XMLHttpRequest();
+          window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+        //window["req"+(index+1).toString()].onload = function () {
+          window["req"+(index+1).toString()].send(null);
+          var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          var div = document.createElement('div');
+          var div2 = document.createElement('div');
+          var div3 = document.createElement('div');
+          var div4 = document.createElement('div');
+          div2.innerHTML = "Location: " + loc_data.location.city ;
+          div3.innerHTML = "Day of the Week: " + daytitle;
+          div4.innerHTML = "Temperature: " + max.toString();
+          div.appendChild(div2);
+          div.appendChild(div3);
+          div.appendChild(div4);
+          document.body.appendChild(div);
+        }, 48000);
+
+      setTimeout(function() { 
+        //Req 3 - next request
+        index = 14;
+        window["req"+index.toString()]=new XMLHttpRequest();
+        window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+         //window["req"+index.toString()].onload = function () {};
+        window["req"+index.toString()].send(null);
+        var seven_day_forecast = JSON.parse(window["req"+index.toString()].responseText);
+        // find a maximum temperature in the 7 day forecast.
+        var max = 0;
+        var daytitle = null;
+        for (var k = 0; k < seven_day_forecast.forecastList.length; k++) {
+         if(seven_day_forecast.forecastList[k].high > max) {
+          max = seven_day_forecast.forecastList[k].high;
+          daytitle = seven_day_forecast.forecastList[k].dayTitle;
+          }
+        }
+
+        
+
+        
+          // Req 4 - request for city information.
+          window["req"+(index+1).toString()]=new XMLHttpRequest();
+          window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+        //window["req"+(index+1).toString()].onload = function () {
+          window["req"+(index+1).toString()].send(null);
+          var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          var div = document.createElement('div');
+          var div2 = document.createElement('div');
+          var div3 = document.createElement('div');
+          var div4 = document.createElement('div');
+          div2.innerHTML = "Location: " + loc_data.location.city ;
+          div3.innerHTML = "Day of the Week: " + daytitle;
+          div4.innerHTML = "Temperature: " + max.toString();
+          div.appendChild(div2);
+          div.appendChild(div3);
+          div.appendChild(div4);
+          document.body.appendChild(div);
+        }, 56000);
+
+      setTimeout(function() { 
+        //Req 3 - next request
+        index = 16;
+        window["req"+index.toString()]=new XMLHttpRequest();
+        window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+         //window["req"+index.toString()].onload = function () {};
+        window["req"+index.toString()].send(null);
+        var seven_day_forecast = JSON.parse(window["req"+index.toString()].responseText);
+        // find a maximum temperature in the 7 day forecast.
+        var max = 0;
+        var daytitle = null;
+        for (var k = 0; k < seven_day_forecast.forecastList.length; k++) {
+         if(seven_day_forecast.forecastList[k].high > max) {
+          max = seven_day_forecast.forecastList[k].high;
+          daytitle = seven_day_forecast.forecastList[k].dayTitle;
+          }
+        }
+
+        
+
+        
+          // Req 4 - request for city information.
+          window["req"+(index+1).toString()]=new XMLHttpRequest();
+          window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
+          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
+          '&callback=?', false);
+        //window["req"+(index+1).toString()].onload = function () {
+          window["req"+(index+1).toString()].send(null);
+          var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          var div = document.createElement('div');
+          var div2 = document.createElement('div');
+          var div3 = document.createElement('div');
+          var div4 = document.createElement('div');
+          div2.innerHTML = "Location: " + loc_data.location.city ;
+          div3.innerHTML = "Day of the Week: " + daytitle;
+          div4.innerHTML = "Temperature: " + max.toString();
+          div.appendChild(div2);
+          div.appendChild(div3);
+          div.appendChild(div4);
+          document.body.appendChild(div);
+        }, 64000);
         
     //}
 
