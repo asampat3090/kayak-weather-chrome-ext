@@ -1,15 +1,30 @@
-I decided to try my luck with creating a Google Chrome Extension that interfaces with the APIs to obtain the proper function. Since this is my first time trying to create an extension, it's not perfectly polished, but the general algorithm follows the 
+I decided to try my luck with creating a Google Chrome Extension that interfaces with the APIs to obtain the proper function. Since this is my first time trying to create an extension, it's not perfectly polished. Unfortunately I'm not able to make it work perfectly right now but it interfaces with both APIs and is able to extract relevant information. However, when I try to access the same weatherbug api multiple times, I get a 403 forbidden error. I believe I just need to make sure there is enough time between calls but I haven't been able to code that. Consider my app submission just a proof of concept but not necessarily a final product. In retrospect I should have just used jQuery. 
 
-1. Convert the destination to it's zip code - use GeoCode API JSON
-2. Use the zip code to find nearby zip codes (within 30km max) - use GeoCode API JSON
-3. Input the nearby zip codes into the WeatherBug API 
-4. Extract 7-day forecast for each of the nearby zip code using the WeatherBug API.
-5. Find the max of each 7-day forecast and insert all of the maxes, their locations, and the day of the max into a linkedlist with those two variables. 
+Below I have outlined the ideal algorithm that I wanted to follow (if I could have figured out how to allow the API to accept multiple requests in a certain amount of time)
+
+1. Convert the destination to it's zip code - use GeoCode API JSON (implemented in code). Note that I haven't left much room for error here as, although I output a lot of matches, I only take the first one assuming that that will be the correct one. Another iteration of the app could prompt the user with the first 5 or 10 results and suggest have the user choose which is best. Although the user can always be more specific by including the state as well.
+
+2. Use the zip code to find nearby populated zip codes (within 30km max) - use GeoCode API JSON (implemented in code). Note, that although in my code I only receive 10 zip codes, I would have liked to retrieve more than 10 (maybe up to 50, this is easily changeable by changing the maxRows flag). Also, in my code I use the findNearbyPostalCodes call however this can be changed to the findNearbyPlaceName, which is better for finding actual populated places based on a particular location, then we could get the postal codes from this). Since the findNearbyPlaceName command doesn't take an input postal code, we would have to extract the lat and lng from the first geonames command 
+
+3. Input the nearby zip codes into an array in order to find the 7-day forecast for each of the zip codes. (implemented in the code).
+
+4. Ideally I wanted to check each of the zip codes and their city names to get rid of the ones that were essentially duplicates (i.e. zip codes that are close to each other). To do this I would use the WeatherBug API and the GetLocation call to get the city name. Then I would have to compare against all of the possible results and remove the duplicates or extremely similar results. (based on Location, Temperature, and Day of Week for max).
+
+5. Extract 7-day forecast for remaining nearby zip codes using the WeatherBug API.
+
+6. Find the max of each 7-day forecast and insert all of the maxes, their locations, and the day of the max into a linkedlist with those two variables. (implemented in code)
 	- Note: as you add more variables into the linked list you maintain the order of the elements based on the max temperature of the 7-day forecast. 
-6. Cut off all but the first 10 locations.
+	- Note: in the code I just used multiple arrays because linked lists would take a long time to implement so it is less than optimal in the code.
+	- Since I have not maintained order in the array as I insert them, I would technically have to sort them. 
+
+6. Cut off all but the first 10 locations. (in my code I have just taken the first ten and not actually decided what warmest ones would be since I am having trouble decoupling API calls with the actual variable involved - thus each API call had me inserting into the html in each iteration rather than doing it after all API calls were done - this can be easily changed).
+
 7. Extract the relevant data to display 
 	- location - use stationName var for display
 	- day of max - use the data in the linked list.
 	- max temperature (used to determine warmest)
-	
-I have created a packaged Google Chrome Extension. To use it, you can simply install it into your google chrome, type in the destination city (and any qualification like state) and click search. 
+Again this can be decoupled from the API call but isn't in the current code. 
+
+For now I have synchronous calls to the API (I also have code that has asynchronous calls but I'll just attach my most recent version).
+
+I have created a packaged Google Chrome Extension. To use it, you can simply install it into your google chrome, type in the destination city (and any qualification like state) and click search. Right now the app, although it should function correctly, doesn't always return more than one result since if the calls are made too quickly a forbidden error results from the server. 
