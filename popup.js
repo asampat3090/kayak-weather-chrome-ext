@@ -10,12 +10,15 @@ document.forms[0].onsubmit = function(e) {
   e.preventDefault(); // Prevent submission
   query = document.getElementById('place').value;
   //getZipFromCity_: 
-  var zip_arr = [];
+  var lat_arr = [];
+  var lng_arr = [];
   var req1;
   var req2;
   var req3;
   var req4;
   var matchedzipcode;
+  var matchedlat;
+  var matchedlng;
 
   req1000=new XMLHttpRequest();
 
@@ -28,12 +31,15 @@ document.forms[0].onsubmit = function(e) {
   var data1 = JSON.parse(req1000.responseText);
   // Find first postal code that matches
   matchedzipcode = data1.postalCodes[0].postalCode;
+  matchedlat = data1.postalCodes[0].lat;
+  matchedlng = data1.postalCodes[0].lng;
 
 
   //Req 2 - next request
   req2000=new XMLHttpRequest(); 
-  req2000.open("GET", 'http://api.geonames.org/findNearbyPostalCodesJSON?' +
-    'postalcode=' + encodeURIComponent(matchedzipcode) + '&' + 
+  req2000.open("GET", 'http://api.geonames.org/findNearbyPlaceNameJSON?' +
+    'lat=' + encodeURIComponent(matchedlat) + '&' + 
+    'lng=' + encodeURIComponent(matchedlng) + '&' +
     'country=US&' +
     'maxRows=10&' +
     'radius=30&' +
@@ -43,9 +49,11 @@ document.forms[0].onsubmit = function(e) {
 
   var data2 = JSON.parse(req2000.responseText);
   //put all of the nearby zips together into a string
-  zip_arr[0] = matchedzipcode;
-  for(var i  = 1 ; i< data2.postalCodes.length; i++) {
-    zip_arr[i] = data2.postalCodes[i].postalCode;
+  lat_arr[0] = matchedlat;
+  lng_arr[0] = matchedlng;
+  for(var i  = 1 ; i< data2.geonames.length; i++) {
+    lat_arr[i] = data2.geonames[i].lat;
+    lng_arr[i] = data2.geonames[i].lng;
   }
 
     // For loop through the zip_arr to find the warmest temperature by 
@@ -60,7 +68,9 @@ document.forms[0].onsubmit = function(e) {
         index = 0;
         window["req"+index.toString()]=new XMLHttpRequest();
         window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
+          '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
          //window["req"+index.toString()].onload = function () {};
@@ -82,7 +92,8 @@ document.forms[0].onsubmit = function(e) {
           // Req 4 - request for city information.
           window["req"+(index+1).toString()]=new XMLHttpRequest();
           window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
           '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
         //window["req"+(index+1).toString()].onload = function () {
@@ -106,7 +117,8 @@ document.forms[0].onsubmit = function(e) {
         index = 2;
         window["req"+index.toString()]=new XMLHttpRequest();
         window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
          //window["req"+index.toString()].onload = function () {};
@@ -128,7 +140,8 @@ document.forms[0].onsubmit = function(e) {
           // Req 4 - request for city information.
           window["req"+(index+1).toString()]=new XMLHttpRequest();
           window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
           '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
         //window["req"+(index+1).toString()].onload = function () {
@@ -152,7 +165,8 @@ document.forms[0].onsubmit = function(e) {
         index = 4;
         window["req"+index.toString()]=new XMLHttpRequest();
         window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
          //window["req"+index.toString()].onload = function () {};
@@ -174,7 +188,8 @@ document.forms[0].onsubmit = function(e) {
           // Req 4 - request for city information.
           window["req"+(index+1).toString()]=new XMLHttpRequest();
           window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
           '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
         //window["req"+(index+1).toString()].onload = function () {
@@ -198,7 +213,8 @@ document.forms[0].onsubmit = function(e) {
         index = 6;
         window["req"+index.toString()]=new XMLHttpRequest();
         window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
          //window["req"+index.toString()].onload = function () {};
@@ -220,7 +236,8 @@ document.forms[0].onsubmit = function(e) {
           // Req 4 - request for city information.
           window["req"+(index+1).toString()]=new XMLHttpRequest();
           window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
           '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
         //window["req"+(index+1).toString()].onload = function () {
@@ -244,7 +261,8 @@ document.forms[0].onsubmit = function(e) {
         index = 8;
         window["req"+index.toString()]=new XMLHttpRequest();
         window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
          //window["req"+index.toString()].onload = function () {};
@@ -266,7 +284,8 @@ document.forms[0].onsubmit = function(e) {
           // Req 4 - request for city information.
           window["req"+(index+1).toString()]=new XMLHttpRequest();
           window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
           '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
         //window["req"+(index+1).toString()].onload = function () {
@@ -290,7 +309,8 @@ document.forms[0].onsubmit = function(e) {
         index = 10;
         window["req"+index.toString()]=new XMLHttpRequest();
         window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
          //window["req"+index.toString()].onload = function () {};
@@ -312,7 +332,8 @@ document.forms[0].onsubmit = function(e) {
           // Req 4 - request for city information.
           window["req"+(index+1).toString()]=new XMLHttpRequest();
           window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
           '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
         //window["req"+(index+1).toString()].onload = function () {
@@ -336,7 +357,8 @@ document.forms[0].onsubmit = function(e) {
         index = 12;
         window["req"+index.toString()]=new XMLHttpRequest();
         window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
          //window["req"+index.toString()].onload = function () {};
@@ -358,7 +380,8 @@ document.forms[0].onsubmit = function(e) {
           // Req 4 - request for city information.
           window["req"+(index+1).toString()]=new XMLHttpRequest();
           window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
           '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
         //window["req"+(index+1).toString()].onload = function () {
@@ -382,7 +405,8 @@ document.forms[0].onsubmit = function(e) {
         index = 14;
         window["req"+index.toString()]=new XMLHttpRequest();
         window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
          //window["req"+index.toString()].onload = function () {};
@@ -404,7 +428,8 @@ document.forms[0].onsubmit = function(e) {
           // Req 4 - request for city information.
           window["req"+(index+1).toString()]=new XMLHttpRequest();
           window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
           '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
         //window["req"+(index+1).toString()].onload = function () {
@@ -428,7 +453,8 @@ document.forms[0].onsubmit = function(e) {
         index = 16;
         window["req"+index.toString()]=new XMLHttpRequest();
         window["req"+index.toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetForecast.ashx?' +
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + '&nf=7&ih=1&ht=t&ht=i&l=en&c=US&' +
           'api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
          //window["req"+index.toString()].onload = function () {};
@@ -450,7 +476,8 @@ document.forms[0].onsubmit = function(e) {
           // Req 4 - request for city information.
           window["req"+(index+1).toString()]=new XMLHttpRequest();
           window["req"+(index+1).toString()].open("GET", 'http://i.wxbug.net/REST/Direct/GetLocation.ashx?' + 
-          'zip=' + encodeURIComponent(zip_arr[index/2]) + 
+          'la=' + encodeURIComponent(lat_arr[index/2]) + '&' +
+          'lo=' + encodeURIComponent(lng_arr[index/2]) + 
           '&api_key=pd7k857xcvvgszap8ajkhdnu' + 
           '&callback=?', false);
         //window["req"+(index+1).toString()].onload = function () {
