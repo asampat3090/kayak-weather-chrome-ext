@@ -19,6 +19,9 @@ document.forms[0].onsubmit = function(e) {
   var matchedzipcode;
   var matchedlat;
   var matchedlng;
+  var max_arr = [];
+  var daytitle_arr = [];
+  var loc_arr = [];
 
   req1000=new XMLHttpRequest();
 
@@ -48,7 +51,7 @@ document.forms[0].onsubmit = function(e) {
   //req2000.onload = function () {};
 
   var data2 = JSON.parse(req2000.responseText);
-  //put all of the nearby zips together into a string
+  //put all of the nearby zips together into an array
   lat_arr[0] = matchedlat;
   lng_arr[0] = matchedlng;
   for(var i  = 1 ; i< data2.geonames.length; i++) {
@@ -85,7 +88,8 @@ document.forms[0].onsubmit = function(e) {
           daytitle = seven_day_forecast.forecastList[k].dayTitle;
           }
         }
-
+        max_arr[index/2]=max;
+        daytitle_arr[index/2]=daytitle;
         
 
         
@@ -99,7 +103,9 @@ document.forms[0].onsubmit = function(e) {
         //window["req"+(index+1).toString()].onload = function () {
           window["req"+(index+1).toString()].send(null);
           var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          loc_arr[index/2]=loc_data.location.city;
           var div = document.createElement('div');
+          div.id = (index/2).toString();
           var div2 = document.createElement('div');
           var div3 = document.createElement('div');
           var div4 = document.createElement('div');
@@ -133,8 +139,8 @@ document.forms[0].onsubmit = function(e) {
           daytitle = seven_day_forecast.forecastList[k].dayTitle;
           }
         }
-
-        
+        max_arr[index/2]=max;
+        daytitle_arr[index/2]=daytitle;        
 
         
           // Req 4 - request for city information.
@@ -147,7 +153,9 @@ document.forms[0].onsubmit = function(e) {
         //window["req"+(index+1).toString()].onload = function () {
           window["req"+(index+1).toString()].send(null);
           var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          loc_arr[index/2]=loc_data.location.city;
           var div = document.createElement('div');
+          div.id = (index/2).toString();
           var div2 = document.createElement('div');
           var div3 = document.createElement('div');
           var div4 = document.createElement('div');
@@ -181,8 +189,8 @@ document.forms[0].onsubmit = function(e) {
           daytitle = seven_day_forecast.forecastList[k].dayTitle;
           }
         }
-
-        
+        max_arr[index/2]=max;
+        daytitle_arr[index/2]=daytitle;
 
         
           // Req 4 - request for city information.
@@ -195,7 +203,9 @@ document.forms[0].onsubmit = function(e) {
         //window["req"+(index+1).toString()].onload = function () {
           window["req"+(index+1).toString()].send(null);
           var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          loc_arr[index/2]=loc_data.location.city;
           var div = document.createElement('div');
+          div.id = (index/2).toString();
           var div2 = document.createElement('div');
           var div3 = document.createElement('div');
           var div4 = document.createElement('div');
@@ -229,8 +239,8 @@ document.forms[0].onsubmit = function(e) {
           daytitle = seven_day_forecast.forecastList[k].dayTitle;
           }
         }
-
-        
+        max_arr[index/2]=max;
+        daytitle_arr[index/2]=daytitle;
 
         
           // Req 4 - request for city information.
@@ -243,7 +253,9 @@ document.forms[0].onsubmit = function(e) {
         //window["req"+(index+1).toString()].onload = function () {
           window["req"+(index+1).toString()].send(null);
           var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          loc_arr[index/2]=loc_data.location.city;
           var div = document.createElement('div');
+          div.id = (index/2).toString();
           var div2 = document.createElement('div');
           var div3 = document.createElement('div');
           var div4 = document.createElement('div');
@@ -277,8 +289,8 @@ document.forms[0].onsubmit = function(e) {
           daytitle = seven_day_forecast.forecastList[k].dayTitle;
           }
         }
-
-        
+        max_arr[index/2]=max;
+        daytitle_arr[index/2]=daytitle;
 
         
           // Req 4 - request for city information.
@@ -291,7 +303,9 @@ document.forms[0].onsubmit = function(e) {
         //window["req"+(index+1).toString()].onload = function () {
           window["req"+(index+1).toString()].send(null);
           var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          loc_arr[index/2]=loc_data.location.city;
           var div = document.createElement('div');
+          div.id = (index/2).toString();
           var div2 = document.createElement('div');
           var div3 = document.createElement('div');
           var div4 = document.createElement('div');
@@ -325,8 +339,8 @@ document.forms[0].onsubmit = function(e) {
           daytitle = seven_day_forecast.forecastList[k].dayTitle;
           }
         }
-
-        
+        max_arr[index/2]=max;
+        daytitle_arr[index/2]=daytitle;
 
         
           // Req 4 - request for city information.
@@ -339,7 +353,9 @@ document.forms[0].onsubmit = function(e) {
         //window["req"+(index+1).toString()].onload = function () {
           window["req"+(index+1).toString()].send(null);
           var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          loc_arr[index/2]=loc_data.location.city;
           var div = document.createElement('div');
+          div.id = (index/2).toString();
           var div2 = document.createElement('div');
           var div3 = document.createElement('div');
           var div4 = document.createElement('div');
@@ -373,8 +389,8 @@ document.forms[0].onsubmit = function(e) {
           daytitle = seven_day_forecast.forecastList[k].dayTitle;
           }
         }
-
-        
+        max_arr[index/2]=max;
+        daytitle_arr[index/2]=daytitle;
 
         
           // Req 4 - request for city information.
@@ -387,7 +403,9 @@ document.forms[0].onsubmit = function(e) {
         //window["req"+(index+1).toString()].onload = function () {
           window["req"+(index+1).toString()].send(null);
           var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          loc_arr[index/2]=loc_data.location.city;
           var div = document.createElement('div');
+          div.id = (index/2).toString();
           var div2 = document.createElement('div');
           var div3 = document.createElement('div');
           var div4 = document.createElement('div');
@@ -421,8 +439,8 @@ document.forms[0].onsubmit = function(e) {
           daytitle = seven_day_forecast.forecastList[k].dayTitle;
           }
         }
-
-        
+        max_arr[index/2]=max;
+        daytitle_arr[index/2]=daytitle;
 
         
           // Req 4 - request for city information.
@@ -435,7 +453,9 @@ document.forms[0].onsubmit = function(e) {
         //window["req"+(index+1).toString()].onload = function () {
           window["req"+(index+1).toString()].send(null);
           var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          loc_arr[index/2]=loc_data.location.city;
           var div = document.createElement('div');
+          div.id = (index/2).toString();
           var div2 = document.createElement('div');
           var div3 = document.createElement('div');
           var div4 = document.createElement('div');
@@ -469,8 +489,8 @@ document.forms[0].onsubmit = function(e) {
           daytitle = seven_day_forecast.forecastList[k].dayTitle;
           }
         }
-
-        
+        max_arr[index/2]=max;
+        daytitle_arr[index/2]=daytitle;
 
         
           // Req 4 - request for city information.
@@ -483,7 +503,9 @@ document.forms[0].onsubmit = function(e) {
         //window["req"+(index+1).toString()].onload = function () {
           window["req"+(index+1).toString()].send(null);
           var loc_data = JSON.parse(window["req"+(index+1).toString()].responseText);
+          loc_arr[index/2]=loc_data.location.city;
           var div = document.createElement('div');
+          div.id = (index/2).toString();
           var div2 = document.createElement('div');
           var div3 = document.createElement('div');
           var div4 = document.createElement('div');
@@ -498,8 +520,75 @@ document.forms[0].onsubmit = function(e) {
         
     //}
 
+    // insert sections into proper sections of html.
+    setTimeout(function() {
+      quick_sort(max_arr, daytitle_arr, loc_arr);
+      for(var i = 0 ; i<max_arr.length; i ++) {
+        // first remove the div with the same id 
+        var div_to_remove = document.getElementById(i.toString());
+        div_to_remove.parentNode.removeChild(div_to_remove);
+        // create the new div in order and add it right after the search bar.
+        var div = document.createElement('div');
+        div.id = (i).toString();
+        var div2 = document.createElement('div');
+        var div3 = document.createElement('div');
+        var div4 = document.createElement('div');
+        div2.innerHTML = "Location: " + loc_arr[i] ;
+        div3.innerHTML = "Day of the Week: " + daytitle_arr[i];
+        div4.innerHTML = "Temperature: " + max_arr[i].toString();
+        div.appendChild(div2);
+        div.appendChild(div3);
+        div.appendChild(div4);
+        document.body.insertBefore(div, document.body.childNodes[1]);
+      //document.body.childNodes[i];
+      }
+    }, 72000);
+    
+    //implement quicksort by sorted array and move around auxilary arrays based on sorted array. 
+    function quick_sort(sort_array, aux_array1, aux_array2) {
+      qsort(sort_array, aux_array1, aux_array2, 0, sort_array.length);
+    }
 
+    function qsort(sort_array, aux_array1, aux_array2, begin, end)
+    {
+      if(end-1>begin) {
+        var pivot=begin+Math.floor(Math.random()*(end-begin));
 
+        pivot=partition(sort_array, aux_array1, aux_array2, begin, end, pivot);
+
+        qsort(sort_array, aux_array1, aux_array2, begin, pivot);
+        qsort(sort_array, aux_array1, aux_array2, pivot+1, end);
+      }
+    }
+
+    function partition(sort_array, aux_array1, aux_array2, begin, end, pivot)
+    {
+      var piv=sort_array[pivot];
+      sort_array.swap(pivot, end-1);
+      aux_array1.swap(pivot, end-1);
+      aux_array2.swap(pivot, end-1);
+      var store=begin;
+      var ix;
+      for(ix=begin; ix<end-1; ++ix) {
+        if(sort_array[ix]<=piv) {
+          sort_array.swap(store, ix);
+          aux_array1.swap(store, ix);
+          aux_array2.swap(store, ix);
+          ++store;
+        }
+      }
+      sort_array.swap(end-1, store);
+      aux_array1.swap(end-1, store);
+      aux_array2.swap(end-1, store);
+      return store;
+    }
+
+    Array.prototype.swap=function(a, b)
+    {
+      var tmp=this[a];
+      this[a]=this[b];
+      this[b]=tmp;
+    }
   
 }; 
 
